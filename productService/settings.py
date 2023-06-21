@@ -141,3 +141,5 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 AUTH_USER_MODEL = 'users.ExtendedUser'
+
+APPEND_SLASH = True

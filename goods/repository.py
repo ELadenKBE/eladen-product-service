@@ -49,7 +49,6 @@ class GoodRepository(RepositoryBase, IRepository):
         if user.is_admin() or user == good.seller:
             return super(GoodRepository, GoodRepository).\
                 update_item_base(GoodRepository,
-                                 item_id=kwargs["item_id"],
                                  **kwargs)
         else:
             raise UnauthorizedError(
