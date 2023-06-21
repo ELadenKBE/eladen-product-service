@@ -1,7 +1,8 @@
-Product Microservice
+# Product Microservice
+
 This is a Django GraphQL API microservice that provides functionality for managing products. It includes packages/entities for categories, goods, and goods lists.
 
-Installation
+## Installation
 Clone the repository:
 ```
 shell
@@ -36,10 +37,10 @@ python manage.py runserver
 ```
 The server should now be running at http://localhost:8000.
 
-GraphQL API
+## GraphQL API
 The Product Microservice provides a GraphQL API for querying and mutating data. The GraphQL endpoint is located at http://localhost:8000/graphql.
 
 To explore and interact with the API, you can use tools like GraphiQL or Insomnia.
 
-License
+## License
 This project is licensed under the MIT License. See the LICENSE file for more information.
