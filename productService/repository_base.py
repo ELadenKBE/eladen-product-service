@@ -5,6 +5,8 @@ from django.db import models
 from django.db.models import Q
 from graphql import GraphQLResolveInfo
 
+from productService.errors import ResourceError
+
 
 class IRepository(metaclass=abc.ABCMeta):
     @staticmethod
@@ -67,4 +69,6 @@ class RepositoryBase:
 
     def delete_item_base(self, item_id: str):
         item = self.model.objects.filter(id=item_id).first()
+        if item is None:
+            raise ResourceError('object with searched id does not exist')
         item.delete()

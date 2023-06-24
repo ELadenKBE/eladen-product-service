@@ -3,7 +3,7 @@ from graphql import GraphQLResolveInfo
 
 from goods.models import Good
 from goods_list.models import GoodsList
-from productService.errors import UnauthorizedError
+from productService.errors import UnauthorizedError, ResourceError
 from productService.repository_base import RepositoryBase, IRepository
 from users.models import ExtendedUser
 
@@ -143,6 +143,8 @@ class GoodsListRepository(RepositoryBase, IRepository):
                 :return:
                 """
         goods_list = GoodsList.objects.filter(id=searched_id).first()
+        if goods_list is None:
+            raise ResourceError('object with searched id does not exist')
         user: ExtendedUser = info.context.user
         if user.is_admin():
             goods_list.delete()

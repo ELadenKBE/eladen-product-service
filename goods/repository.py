@@ -3,7 +3,7 @@ from graphql import GraphQLResolveInfo
 
 from category.models import Category
 from goods.models import Good
-from productService.errors import UnauthorizedError
+from productService.errors import UnauthorizedError, ResourceError
 from productService.repository_base import RepositoryBase, IRepository
 from users.models import ExtendedUser
 
@@ -58,6 +58,8 @@ class GoodRepository(RepositoryBase, IRepository):
     def delete_item(info: GraphQLResolveInfo, searched_id: str):
         user: ExtendedUser = info.context.user or None
         good = Good.objects.filter(id=searched_id).first()
+        if good is None:
+            raise ResourceError('object with searched id does not exist')
         if user.is_admin() or user.id == good.seller_id:
             super(GoodRepository, GoodRepository). \
                 delete_item_base(GoodRepository, searched_id)
