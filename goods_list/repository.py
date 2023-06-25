@@ -83,6 +83,8 @@ class GoodsListRepository(RepositoryBase, IRepository):
         good = Good.objects.get(id=good_id)
         cart_list: GoodsList = GoodsList.objects.filter(user=user,
                                                         title="cart").first()
+        if cart_list is None:
+            raise ResourceError('object with searched id does not exist')
         cart_list.goods.add(good)
         cart_list.save()
         return good
