@@ -50,6 +50,7 @@ class CreateGood(graphene.Mutation):
     image = graphene.String()
     manufacturer = graphene.String()
     amount = graphene.Int()
+    url = graphene.String()
 
     class Arguments:
         title = graphene.String(required=True)
@@ -60,6 +61,7 @@ class CreateGood(graphene.Mutation):
         image = graphene.String()
         manufacturer = graphene.String(required=True)
         amount = graphene.Int()
+        url = graphene.String()
 
     @permission(roles=[Admin, Seller])
     def mutate(self,
@@ -69,6 +71,7 @@ class CreateGood(graphene.Mutation):
                category_id,
                price,
                manufacturer,
+               url=None,
                amount=None,
                description=None,
                image=None):
@@ -94,7 +97,8 @@ class CreateGood(graphene.Mutation):
                                           manufacturer=manufacturer,
                                           amount=amount,
                                           description=description,
-                                          image=image)
+                                          image=image,
+                                          url=url)
 
         return CreateGood(
             id=good.id,
@@ -105,7 +109,8 @@ class CreateGood(graphene.Mutation):
             seller=good.seller,
             price=good.price,
             image=good.image,
-            manufacturer=good.manufacturer
+            manufacturer=good.manufacturer,
+            url=good.url
         )
 
 
@@ -120,6 +125,7 @@ class UpdateGood(graphene.Mutation):
     image = graphene.String()
     manufacturer = graphene.String()
     amount = graphene.Int()
+    url = graphene.String()
 
     class Arguments:
         good_id = graphene.Int(required=True)
@@ -130,6 +136,7 @@ class UpdateGood(graphene.Mutation):
         image = graphene.String()
         manufacturer = graphene.String()
         amount = graphene.Int()
+        url = graphene.String()
 
     @permission(roles=[Admin, Seller])
     def mutate(self, info, good_id,
@@ -140,6 +147,7 @@ class UpdateGood(graphene.Mutation):
                image=None,
                manufacturer=None,
                amount=None,
+               url=None
                ):
         """
         TODO add docs
@@ -165,7 +173,8 @@ class UpdateGood(graphene.Mutation):
                                           manufacturer=manufacturer,
                                           amount=amount,
                                           description=description,
-                                          image=image)
+                                          image=image,
+                                          url=url)
 
         return UpdateGood(
             id=good.id,
@@ -176,7 +185,8 @@ class UpdateGood(graphene.Mutation):
             price=good.price,
             category=good.category,
             image=good.image,
-            amount=good.amount
+            amount=good.amount,
+            url=good.url
         )
 
 
@@ -191,6 +201,7 @@ class ChangeCategory(graphene.Mutation):
     image = graphene.String()
     manufacturer = graphene.String()
     amount = graphene.Int()
+    url = graphene.String()
 
     class Arguments:
         category_id = graphene.Int()
@@ -219,7 +230,8 @@ class ChangeCategory(graphene.Mutation):
             seller=good.seller,
             price=good.price,
             image=good.image,
-            amount=good.amount
+            amount=good.amount,
+            url=good.url
         )
 
 

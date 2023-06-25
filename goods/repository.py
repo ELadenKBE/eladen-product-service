@@ -69,7 +69,11 @@ class GoodRepository(RepositoryBase, IRepository):
                         searched_id: str,
                         category_id: str) -> [QuerySet]:
         category = Category.objects.filter(id=category_id).first()
+        if category is None:
+            raise ResourceError('object with searched id does not exist')
         good = Good.objects.filter(id=searched_id).first()
+        if good is None:
+            raise ResourceError('object with searched id does not exist')
         user: ExtendedUser = info.context.user or None
         if user.is_admin() or user == good.seller:
             good.category = category
