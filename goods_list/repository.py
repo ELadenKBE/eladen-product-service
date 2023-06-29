@@ -47,10 +47,9 @@ class GoodsListRepository(RepositoryBase, IRepository):
                 """
         user: ExtendedUser = info.context.user
         search_filter = (Q(title__icontains=search_filter))
-        if user.is_user() or user.is_seller():
-            return GoodsList.objects.filter(search_filter & user == user).all()
-        else:
-            return GoodsList.objects.filter(search_filter).all()
+        filtered_list = GoodsList.objects.filter(search_filter).all()
+        lists_to_return = [item for item in filtered_list if item.user == user]
+        return lists_to_return
 
     @staticmethod
     def get_by_id(searched_id: str,
