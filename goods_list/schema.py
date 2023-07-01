@@ -19,7 +19,7 @@ class Query(graphene.ObjectType):
                                 search=graphene.String(),
                                 searched_id=graphene.Int(), )
 
-    @permission(roles=[Admin, Seller, User])
+#    @permission(roles=[Admin, Seller, User])
     def resolve_goods_lists(self, info,
                             searched_id=None,
                             search=None,
