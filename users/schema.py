@@ -3,7 +3,6 @@ from django.db.models import Q
 from graphene_django import DjangoObjectType
 
 from goods_list.models import GoodsList
-from productService.permissions import permission, Admin, Seller, User, Anon
 from users.models import ExtendedUser
 
 
@@ -55,7 +54,7 @@ class CreateUser(graphene.Mutation):
         lastname = graphene.String()
         image = graphene.String()
 
-    @permission(roles=[Admin, Anon])
+ #   @permission(roles=[Admin, Anon])
     def mutate(self,
                info,
                username,
@@ -134,7 +133,7 @@ class UpdateUser(graphene.Mutation):
         lastname = graphene.String()
         image = graphene.String()
 
-    @permission(roles=[Admin, Seller, User])
+#    @permission(roles=[Admin, Seller, User])
     def mutate(self,
                info,
                user_id,
@@ -180,7 +179,7 @@ class DeleteUser(graphene.Mutation):
     class Arguments:
         user_id = graphene.Int(required=True)
 
-    @permission(roles=[Admin, Seller, User])
+#    @permission(roles=[Admin, Seller, User])
     def mutate(self, info, user_id):
         """
         TODO add docs

@@ -43,7 +43,7 @@ class BaseService:
     url = None
     service_name = None
 
-    def _verify_connection(self):
+    def verify_connection(self):
         try:
             introspection_query = {
                 "query": """
@@ -56,8 +56,7 @@ class BaseService:
                             }
                         """
             }
-            response = requests.post(self.url,
-                                     json=introspection_query)
+            response = requests.post(self.url, data=introspection_query)
             if response.status_code == 200:
                 pass
             else:
@@ -77,7 +76,7 @@ class BaseService:
         return response
 
     def _get_data(self, entity_name: str, info: GraphQLResolveInfo):
-        self._verify_connection()
+        self.verify_connection()
         response = self._request(info=info)
         data = response.json().get('data', {})
         return data.get(entity_name, [])
@@ -91,6 +90,6 @@ class BaseService:
             raise ValidationError(cleaned_json[0]['message'])
 
     def _create_item(self, entity_name: str, info: GraphQLResolveInfo):
-        self._verify_connection()
+        self.verify_connection()
         item = self._get_data(info=info, entity_name=entity_name)
         return item

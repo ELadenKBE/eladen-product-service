@@ -16,6 +16,7 @@ class UserService(BaseService):
         :param info:
         :return:
         """
+        self.verify_connection()
         query_template = """query{{
                   users(searchedId: {0}){{
                             id
@@ -30,5 +31,6 @@ class UserService(BaseService):
 
         query = query_template.format(int(user_id))
         response = requests.post(self.url, data={'query': query})
-        data = response.json().get('data', {})
-        pass
+        user_in_dict = response.json().get('data', {}).get('users')[0]
+        user = ExtendedUser(**user_in_dict)
+        return user
