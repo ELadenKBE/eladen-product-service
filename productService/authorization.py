@@ -4,7 +4,9 @@ from productService.user_service import UserService
 user_service = UserService()
 
 
-def authorization(func):
+def grant_authorization(func):
+    """This decorator extracts id of user from AUTHORIZATION header
+    and requests a user service to get a user information"""
     def wrapper(*arg, **kwargs):
         info = arg[1]
         try:

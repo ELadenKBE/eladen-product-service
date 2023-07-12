@@ -4,7 +4,7 @@ from graphene_django import DjangoObjectType
 
 from category.models import Category
 from category.repository import CategoryRepository
-from productService.authorization import authorization
+from productService.authorization import grant_authorization
 
 
 class CategoryType(DjangoObjectType):
@@ -18,7 +18,7 @@ class Query(graphene.ObjectType):
                                searched_id=graphene.String(),
                                )
 
-    @authorization
+    @grant_authorization
     def resolve_categories(self,
                            info,
                            search=None,
@@ -48,7 +48,7 @@ class CreateCategory(graphene.Mutation):
     class Arguments:
         title = graphene.String()
 
-#    @permission(roles=[Admin])
+    @grant_authorization
     def mutate(self, info, title):
         """
         TODO add docs
@@ -73,7 +73,7 @@ class UpdateCategory(graphene.Mutation):
         id = graphene.Int(required=True)
         title = graphene.String()
 
- #   @permission(roles=[Admin])
+    @grant_authorization
     def mutate(self, info, id, title):
         """
         TODO add docs
@@ -98,7 +98,7 @@ class DeleteCategory(graphene.Mutation):
     class Arguments:
         id = graphene.Int(required=True)
 
- #   @permission(roles=[Admin])
+    @grant_authorization
     def mutate(self, info, id):
         """
         TODO add docs

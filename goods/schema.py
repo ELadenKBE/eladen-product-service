@@ -3,8 +3,8 @@ from django.db.models import Q
 from graphene_django import DjangoObjectType
 
 from category.schema import CategoryType
-#from productService.permissions import permission, All, Seller, Admin
-from users.schema import UserType
+from productService.authorization import grant_authorization
+from productService.user_service import UserType
 from .models import Good
 from .repository import GoodRepository
 
@@ -20,7 +20,7 @@ class Query(graphene.ObjectType):
                           search=graphene.String(),
                           )
 
- #   @permission(roles=[All])
+    @grant_authorization
     def resolve_goods(self, info, search=None, searched_id=None, **kwargs):
         """
         Return all elements if search arguments are not given.
@@ -63,7 +63,7 @@ class CreateGood(graphene.Mutation):
         amount = graphene.Int()
         url = graphene.String()
 
- #   @permission(roles=[Admin, Seller])
+    @grant_authorization
     def mutate(self,
                info,
                title,
@@ -138,7 +138,7 @@ class UpdateGood(graphene.Mutation):
         amount = graphene.Int()
         url = graphene.String()
 
-#    @permission(roles=[Admin, Seller])
+    @grant_authorization
     def mutate(self, info, good_id,
                title=None,
                description=None,
@@ -207,7 +207,7 @@ class ChangeCategory(graphene.Mutation):
         category_id = graphene.Int()
         good_id = graphene.Int()
 
-#    @permission(roles=[Admin, Seller])
+    @grant_authorization
     def mutate(self, info, category_id, good_id):
         """
         TODO add docs
@@ -241,7 +241,7 @@ class DeleteGood(graphene.Mutation):
     class Arguments:
         id = graphene.Int(required=True)
 
-#    @permission(roles=[Admin, Seller])
+    @grant_authorization
     def mutate(self, info, id):
         """
         TODO add docs

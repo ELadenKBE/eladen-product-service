@@ -3,8 +3,8 @@ from graphene_django import DjangoObjectType
 
 from category.schema import CategoryType
 from goods.schema import GoodType
-#from productService.permissions import permission, Admin, Seller, User
-from users.schema import UserType
+from productService.authorization import grant_authorization
+from productService.user_service import UserType
 from .models import GoodsList
 from .repository import GoodsListRepository
 
@@ -19,7 +19,7 @@ class Query(graphene.ObjectType):
                                 search=graphene.String(),
                                 searched_id=graphene.Int(), )
 
-#    @permission(roles=[Admin, Seller, User])
+    @grant_authorization
     def resolve_goods_lists(self, info,
                             searched_id=None,
                             search=None,
@@ -51,7 +51,7 @@ class CreateGoodsList(graphene.Mutation):
     class Arguments:
         title = graphene.String()
 
- #   @permission(roles=[Admin, Seller, User])
+    @grant_authorization
     def mutate(self, info, title):
         """
         TODO add doctrings
@@ -81,7 +81,7 @@ class AddGoodToCart(graphene.Mutation):
     class Arguments:
         good_id = graphene.Int()
 
-#    @permission(roles=[Admin, User])
+    @grant_authorization
     def mutate(self, info, good_id):
         good = GoodsListRepository.add_good_to_cart(info=info, good_id=good_id)
         return AddGoodToCart(
@@ -103,7 +103,7 @@ class CleanGoodsList(graphene.Mutation):
     class Arguments:
         list_id = graphene.Int()
 
-#    @permission(roles=[Admin, User, Seller])
+    @grant_authorization
     def mutate(self, info, list_id):
 
         goods_list = GoodsListRepository.clean_goods(info=info,
@@ -124,7 +124,7 @@ class UpdateGoodsList(graphene.Mutation):
         list_id = graphene.Int()
         title = graphene.String()
 
-#    @permission(roles=[Admin, Seller, User])
+    @grant_authorization
     def mutate(self, info, list_id, title):
         """
         TODO add docs
@@ -151,7 +151,7 @@ class DeleteGoodsList(graphene.Mutation):
     class Arguments:
         list_id = graphene.Int(required=True)
 
- #   @permission(roles=[Admin, Seller, User])
+    @grant_authorization
     def mutate(self, info, list_id):
         """
         TODO add docs

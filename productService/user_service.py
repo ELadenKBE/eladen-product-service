@@ -1,8 +1,14 @@
 import requests
 from decouple import config
+from graphene_django import DjangoObjectType
 
 from productService.base_service import BaseService
 from users.models import ExtendedUser
+
+
+class UserType(DjangoObjectType):
+    class Meta:
+        model = ExtendedUser
 
 
 class UserService(BaseService):
