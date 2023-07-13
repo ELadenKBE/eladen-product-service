@@ -235,6 +235,22 @@ class ChangeCategory(graphene.Mutation):
         )
 
 
+class DecreaseAmount(graphene.Mutation):
+    good_id = graphene.Int()
+    amount = graphene.Int()
+
+    class Arguments:
+        good_id = graphene.Int(required=True)
+        amount = graphene.Int(required=True)
+
+    @grant_authorization
+    def mutate(self, info, good_id, amount):
+        good = GoodRepository.decrease_amount(info=info,
+                                              good_id=good_id,
+                                              amount=amount)
+        return DecreaseAmount(good_id=good.id, amount=good.amount)
+
+
 class DeleteGood(graphene.Mutation):
     id = graphene.Int(required=True)
 
@@ -262,3 +278,4 @@ class Mutation(graphene.ObjectType):
     change_category = ChangeCategory.Field()
     update_good = UpdateGood.Field()
     delete_good = DeleteGood.Field()
+    decrease_amount = DecreaseAmount.Field()
