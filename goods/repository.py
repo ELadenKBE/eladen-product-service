@@ -79,3 +79,14 @@ class GoodRepository(RepositoryBase, IRepository):
             good.category = category
             good.save()
         return good
+
+    @staticmethod
+    def decrease_amount(info: GraphQLResolveInfo,
+                        good_id: int,
+                        amount: int) -> [QuerySet]:
+        good = Good.objects.filter(id=good_id).first()
+        if good is None:
+            raise ResourceError("Good not found")
+        good.amount = good.amount - amount
+        good.save()
+        return good
