@@ -48,7 +48,10 @@ class GoodsListRepository(RepositoryBase, IRepository):
         user: ExtendedUser = info.context.user
         search_filter = (Q(title__icontains=search_filter))
         filtered_list = GoodsList.objects.filter(search_filter).all()
-        lists_to_return = [item for item in filtered_list if item.user == user]
+        lists_to_return = []
+        for item in filtered_list:
+            if int(item.user_id) == int(user.id):
+                lists_to_return.append(item)
         return lists_to_return
 
     @staticmethod
