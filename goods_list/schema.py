@@ -4,7 +4,7 @@ from graphene_django import DjangoObjectType
 from category.schema import CategoryType
 from goods.schema import GoodType
 from productService.authorization import grant_authorization
-from productService.user_service import UserType
+from users.user_service import UserType
 from .models import GoodsList
 from .repository import GoodsListRepository
 
