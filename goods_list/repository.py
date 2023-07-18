@@ -17,7 +17,7 @@ class GoodsListRepository(RepositoryBase, IRepository):
         user = info.context.user or None
         if user is None:
             raise UnauthorizedError("Unauthorized access!")
-        good_list = GoodsList(title=kwargs["title"], user=user)
+        good_list = GoodsList(title=kwargs["title"], user_id=user.id)
         good_list.save()
         return good_list
 
@@ -31,7 +31,7 @@ class GoodsListRepository(RepositoryBase, IRepository):
                 """
         user: ExtendedUser = info.context.user
         if user.is_user() or user.is_seller():
-            return GoodsList.objects.filter(user=user).all()
+            return GoodsList.objects.filter(user_id=user.id).all()
         if user.is_admin():
             return GoodsList.objects.all()
 
@@ -68,7 +68,8 @@ class GoodsListRepository(RepositoryBase, IRepository):
         if user.is_admin():
             return GoodsList.objects.filter(id=searched_id).first()
         if user.is_user() or user.is_seller():
-            return GoodsList.objects.filter(id=searched_id, user=user).first()
+            return GoodsList.objects.filter(id=searched_id,
+                                            user_id=user.id).first()
 
     @staticmethod
     def add_good_to_cart(info: GraphQLResolveInfo, good_id: str):
@@ -83,7 +84,7 @@ class GoodsListRepository(RepositoryBase, IRepository):
         if user is None:
             raise UnauthorizedError("Unauthorized access!")
         good = Good.objects.get(id=good_id)
-        cart_list: GoodsList = GoodsList.objects.filter(user=user,
+        cart_list: GoodsList = GoodsList.objects.filter(user_id=user.id,
                                                         title="cart").first()
         if cart_list is None:
             raise ResourceError('object with searched id does not exist')
@@ -106,7 +107,7 @@ class GoodsListRepository(RepositoryBase, IRepository):
             goods_list.goods.clear()
             goods_list.save()
         elif user.is_seller() or user.is_user():
-            if goods_list.user == user:
+            if goods_list.user_id == user.id:
                 goods_list.goods.clear()
                 goods_list.save()
             else:
@@ -129,7 +130,7 @@ class GoodsListRepository(RepositoryBase, IRepository):
         if user.is_admin():
             goods_list.title = kwargs["title"]
         elif user.is_user() or user.is_seller():
-            if goods_list.user == user:
+            if goods_list.user_id == user.id:
                 goods_list.title = kwargs["title"]
             else:
                 raise UnauthorizedError(
@@ -152,7 +153,8 @@ class GoodsListRepository(RepositoryBase, IRepository):
         user: ExtendedUser = info.context.user
         if user.is_admin():
             goods_list.delete()
-        elif (user.is_seller() or user.is_user()) and goods_list.user == user:
+        elif (user.is_seller() or user.is_user())\
+                and goods_list.user_id == user.id:
             goods_list.delete()
         else:
             raise UnauthorizedError(

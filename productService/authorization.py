@@ -12,7 +12,11 @@ def grant_authorization(func):
         try:
             auth_header: str = info.context.headers['AUTHORIZATION']
             user_sub = auth_header.split(' ')[1]
-            info.context.user = user_service.get_user(sub=user_sub)
+            user = user_service.get_user_auth(sub=user_sub)
+            if user is None:
+                raise UnauthorizedError(
+                    'authorization error: User not found')
+            info.context.user = user
         except KeyError as key_error:
             raise UnauthorizedError('authorization error: AUTHORIZATION header'
                                     ' is not specified')

@@ -4,7 +4,8 @@ from graphene_django import DjangoObjectType
 from category.schema import CategoryType
 from goods.schema import GoodType
 from productService.authorization import grant_authorization
-from users.user_service import UserType
+from users.models import ExtendedUser
+from users.user_service import UserType, UserService
 from .models import GoodsList
 from .repository import GoodsListRepository
 
@@ -13,6 +14,7 @@ class GoodsListType(DjangoObjectType):
     class Meta:
         model = GoodsList
 
+user_service = UserService()
 
 class Query(graphene.ObjectType):
     goods_lists = graphene.List(GoodsListType,
@@ -61,11 +63,11 @@ class CreateGoodsList(graphene.Mutation):
         """
         good_list: GoodsList = GoodsListRepository.create_item(info=info,
                                                                title=title)
-
+        user: ExtendedUser = info.context.user
         return CreateGoodsList(
             id=good_list.id,
             title=good_list.title,
-            user=good_list.user
+            user=user
         )
 
 

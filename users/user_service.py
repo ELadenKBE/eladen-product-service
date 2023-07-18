@@ -17,7 +17,7 @@ class UserService(BaseService):
     url = config('USER_SERVICE_URL', default=None, cast=str)
     service_name = 'User'
 
-    def get_user(self, sub: str):
+    def get_user_auth(self, sub: str):
         """
 
         :param sub:
@@ -44,3 +44,4 @@ class UserService(BaseService):
             raise ResponseError('User not found')
         user = ExtendedUser(**user_in_dict)
         return user
+
