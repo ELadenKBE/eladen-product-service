@@ -1,5 +1,5 @@
 from productService.errors import UnauthorizedError, ResponseError
-from productService.user_service import UserService
+from users.user_service import UserService
 
 user_service = UserService()
 
@@ -10,8 +10,13 @@ def grant_authorization(func):
     def wrapper(*arg, **kwargs):
         info = arg[1]
         try:
-            user_id = int(info.context.headers['AUTHORIZATION'])
-            info.context.user = user_service.get_user(user_id=user_id)
+            auth_header: str = info.context.headers['AUTHORIZATION']
+            user_sub = auth_header.split(' ')[1]
+            user = user_service.get_user_auth(sub=user_sub)
+            if user is None:
+                raise UnauthorizedError(
+                    'authorization error: User not found')
+            info.context.user = user
         except KeyError as key_error:
             raise UnauthorizedError('authorization error: AUTHORIZATION header'
                                     ' is not specified')
