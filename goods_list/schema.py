@@ -14,7 +14,9 @@ class GoodsListType(DjangoObjectType):
     class Meta:
         model = GoodsList
 
+
 user_service = UserService()
+
 
 class Query(graphene.ObjectType):
     goods_lists = graphene.List(GoodsListType,
