@@ -38,9 +38,10 @@ class Query(graphene.ObjectType):
         :return:
         """
         if search:
-            return GoodsListRepository.get_items_by_filter(
+            good_lists = GoodsListRepository.get_items_by_filter(
                                                         info=info,
                                                         search_filter=search)
+            return good_lists
         if searched_id:
             return [GoodsListRepository.get_by_id(info=info,
                                                   searched_id=searched_id)]
