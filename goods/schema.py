@@ -20,7 +20,6 @@ class Query(graphene.ObjectType):
                           search=graphene.String(),
                           )
 
-    @grant_authorization
     def resolve_goods(self, info, search=None, searched_id=None, **kwargs):
         """
         Return all elements if search arguments are not given.
