@@ -1,3 +1,5 @@
+import json
+
 import graphene
 from django.db.models import Q
 from graphene_django import DjangoObjectType
@@ -23,7 +25,7 @@ class Query(graphene.ObjectType):
     def resolve_goods(self, info, search=None, searched_id=None, **kwargs):
         """
         Return all elements if search arguments are not given.
-
+        
         :param info: request context information
         :param search: searches in title and description
         :param searched_id: id of searched item
